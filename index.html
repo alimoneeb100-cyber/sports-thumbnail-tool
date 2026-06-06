@@ -22,7 +22,6 @@
   .badge-green { background: #1d9e75; }
   .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
   .info-box { background: #0a1f0a; border: 1px solid #1d9e75; border-radius: 10px; padding: 14px 16px; margin-bottom: 1.2rem; font-size: 13px; color: #2dce89; line-height: 1.6; }
-  /* Token Box */
   .token-box { background: #1a1020; border: 1px solid #7c3aed; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
   .token-box .token-title { font-size: 14px; font-weight: 600; color: #a78bfa; margin-bottom: 8px; }
   .token-row { display: flex; gap: 8px; }
@@ -34,7 +33,6 @@
   .token-status.ok { color: #1d9e75; }
   .token-status.err { color: #e63946; }
   .token-help { font-size: 11px; color: #6b5e8a; margin-top: 6px; line-height: 1.5; }
-  /* Cards */
   .card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; }
   .card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; }
   label { font-size: 12px; color: #8892b0; display: block; margin-bottom: 5px; }
@@ -84,7 +82,6 @@
     ✅ <strong>Smart AI System!</strong> HuggingFace AI pehle aapke title ko analyze karke ek detailed prompt banata hai — phir us se title-matched thumbnail generate hoti hai!
   </div>
 
-  <!-- HuggingFace Token -->
   <div class="token-box">
     <div class="token-title">🔑 HuggingFace API Token (Smart AI ke liye)</div>
     <div class="token-row">
@@ -213,7 +210,6 @@
 <footer>Sports Thumbnail Generator &copy; 2025 — Powered by Free AI APIs</footer>
 
 <script>
-  // Token load from localStorage
   let hfToken = localStorage.getItem('hf_token') || '';
   if (hfToken) {
     document.getElementById('hf-token').value = hfToken;
@@ -270,7 +266,6 @@
     a.click();
   }
 
-  // HuggingFace Mistral se smart prompt generate karo
   async function generateSmartPrompt(title, sport, mood, tags) {
     const msg = `You are a YouTube thumbnail art director. Convert this video title into a detailed image generation prompt.
 
@@ -308,7 +303,6 @@ Rules:
     return text.trim();
   }
 
-  // Pollinations se image generate karo
   async function generateImage(prompt) {
     const seed = Math.floor(Math.random() * 999999);
     const url = 'https://image.pollinations.ai/prompt/'
@@ -378,7 +372,6 @@ Rules:
       blob = await generateImage(smartPrompt);
 
     } catch(e) {
-      // Fallback: manually built specific prompt
       console.warn('HF failed, using fallback:', e.message);
       try {
         setStep(3);
