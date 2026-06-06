@@ -41,8 +41,10 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .generated-img { width: 100%; border-radius: 10px; margin-top: 1rem; display: none; }
   .note { font-size: 11px; color: #4a5568; margin-top: 6px; }
+  .model-info { font-size: 11px; color: #1d9e75; margin-top: 6px; }
   footer { text-align: center; padding: 2rem; color: #4a5568; font-size: 13px; }
   .download-btn { width: 100%; padding: 10px; background: #1d9e75; border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; display: none; font-family: inherit; }
+  .error-box { background: #2a1a1a; border: 1px solid #e63946; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 13px; color: #ff6b6b; display: none; }
 </style>
 </head>
 <body>
@@ -56,6 +58,7 @@
     <label>Apna HuggingFace Access Token</label>
     <input type="password" id="hftoken" placeholder="hf_... yahan paste karein">
     <p class="note">Token sirf aapke browser mein rehta hai — koi server nahi jata</p>
+    <p class="model-info">✅ Model: Stable Diffusion XL — Free & Working</p>
   </div>
 
   <div class="card">
@@ -131,6 +134,7 @@
 
   <button class="btn" onclick="generate()" id="genbtn">🎨 Thumbnail Generate Karo</button>
   <div class="loading" id="loading"><span class="spinner"></span> AI thumbnail bana raha hai — 30-60 seconds lagenge...</div>
+  <div class="error-box" id="errorbox"></div>
 
   <div class="card" id="result-card" style="display:none">
     <h2>🖼️ Generated Thumbnail</h2>
@@ -159,6 +163,30 @@ function downloadImg() {
   a.download = 'sports-thumbnail.png';
   a.click();
 }
+
+// Working models list - try in order
+const MODELS = [
+  "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-xl-base-1.0",
+  "https://router.huggingface.co/hf-inference/models/runwayml/stable-diffusion-v1-5",
+  "https://router.huggingface.co/hf-inference/models/stabilityai/stable-diffusion-2-1"
+];
+
+async function tryModel(url, token, prompt) {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ inputs: prompt })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Unknown error' }));
+    throw new Error(err.error || `HTTP ${res.status}`);
+  }
+  return await res.blob();
+}
+
 async function generate() {
   const token = document.getElementById('hftoken').value.trim();
   if (!token) { alert('Pehle Hugging Face token daalo!'); return; }
@@ -168,42 +196,47 @@ async function generate() {
   const mood = document.getElementById('mood').value;
   const tags = getSelectedTags();
 
-  const prompt = `YouTube thumbnail for sports video, title: "${title}", sport: ${sport}, mood: ${mood}, style: ${tags || 'bold, dramatic'}, 16:9 aspect ratio, high quality, vibrant colors, professional sports broadcast style, bold text overlay, stadium background, dramatic lighting`;
+  const prompt = `YouTube sports thumbnail, ${sport} sport, ${mood} mood, ${tags || 'bold dramatic'} style, title theme: ${title}, 16:9 ratio, vibrant colors, professional broadcast, stadium background, dramatic lighting, high quality`;
 
   const btn = document.getElementById('genbtn');
   const loading = document.getElementById('loading');
   const resultCard = document.getElementById('result-card');
   const genImg = document.getElementById('generated-img');
   const dlBtn = document.getElementById('dl-btn');
+  const errorbox = document.getElementById('errorbox');
 
   btn.disabled = true;
   loading.style.display = 'block';
   resultCard.style.display = 'none';
+  errorbox.style.display = 'none';
 
-  try {
-    const res = await fetch("https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-dev", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ inputs: prompt })
-    });
+  let blob = null;
+  let lastError = '';
 
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'API error');
+  for (const modelUrl of MODELS) {
+    try {
+      loading.innerHTML = `<span class="spinner"></span> AI thumbnail bana raha hai — thoda wait karein...`;
+      blob = await tryModel(modelUrl, token, prompt);
+      break; // success
+    } catch(e) {
+      lastError = e.message;
+      continue; // try next model
     }
+  }
 
-    const blob = await res.blob();
+  if (blob) {
     const url = URL.createObjectURL(blob);
     genImg.src = url;
     genImg.style.display = 'block';
     dlBtn.style.display = 'block';
     resultCard.style.display = 'block';
-
-  } catch(e) {
-    alert('Error: ' + e.message + '\nToken check karein ya dobara try karein.');
+  } else {
+    errorbox.style.display = 'block';
+    errorbox.innerHTML = `❌ Error: ${lastError}<br><br>
+    <strong>Fix karo:</strong><br>
+    1. Token sahi hai? <a href="https://huggingface.co/settings/tokens" target="_blank" style="color:#e63946">HuggingFace tokens page</a><br>
+    2. Token mein <strong>Read</strong> permission honi chahiye<br>
+    3. Dobara try karein`;
   }
 
   btn.disabled = false;
