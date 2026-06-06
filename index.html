@@ -161,7 +161,9 @@ Roman Urdu ya English mein jawab do. Short aur actionable rakho.`;
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json",
+        "x-api-key": "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",
+        "anthropic-version": "2023-06-01" },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 1000,
