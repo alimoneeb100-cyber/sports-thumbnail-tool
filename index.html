@@ -37,18 +37,17 @@
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .tag { background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 20px; padding: 5px 14px; font-size: 12px; cursor: pointer; color: #8892b0; transition: all 0.15s; user-select: none; }
   .tag.on { background: #e6394622; border-color: #e63946; color: #e63946; }
-  .btn-generate { width: 100%; padding: 14px; background: #e63946; border: none; border-radius: 10px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-bottom: 1rem; font-family: inherit; letter-spacing: 0.5px; }
+  .btn-generate { width: 100%; padding: 14px; background: #e63946; border: none; border-radius: 10px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-bottom: 1rem; font-family: inherit; }
   .btn-generate:hover { opacity: 0.88; }
   .btn-generate:disabled { opacity: 0.45; cursor: not-allowed; }
-  .loading-box { text-align: center; color: #8892b0; font-size: 14px; padding: 1.2rem; display: none; background: #1a1a2e; border-radius: 10px; margin-bottom: 1rem; }
+  .loading-box { text-align: center; color: #8892b0; font-size: 14px; padding: 1.4rem; display: none; background: #1a1a2e; border-radius: 10px; margin-bottom: 1rem; border: 1px solid #2a2a4a; }
   .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #2a2a4a; border-top-color: #e63946; border-radius: 50%; animation: spin 0.75s linear infinite; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .result-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; display: none; }
   .result-card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; }
-  #generated-img { width: 100%; border-radius: 10px; display: none; border: 1px solid #2a2a4a; }
-  .btn-open { width: 100%; padding: 11px; background: #1d9e75; border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px; font-family: inherit; display: none; }
-  .btn-open:hover { opacity: 0.88; }
-  .step-list { font-size: 12px; color: #8892b0; line-height: 2; margin-top: 10px; background: #0f0f23; border-radius: 8px; padding: 10px 14px; }
+  #thumb-iframe { width: 100%; height: 400px; border: none; border-radius: 10px; display: none; background: #0f0f23; }
+  .btn-download { width: 100%; padding: 12px; background: #1d9e75; border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px; font-family: inherit; display: none; }
+  .btn-download:hover { opacity: 0.88; }
   .note { font-size: 11px; color: #4a5568; margin-top: 6px; }
   footer { text-align: center; padding: 2rem; color: #3a4568; font-size: 12px; }
 </style>
@@ -66,8 +65,8 @@
 <div class="container">
 
   <div class="info-box">
-    ✅ <strong>Koi API Key nahi chahiye!</strong> Yeh tool Pollinations.ai use karta hai — bilkul free aur unlimited.<br>
-    Bas apna title likho, style choose karo aur generate karo!
+    ✅ <strong>Koi API Key nahi chahiye!</strong> Pollinations.ai se free thumbnail generate hoga.<br>
+    Bas title likho, generate karo — thumbnail seedha yahan dikhega!
   </div>
 
   <!-- Title -->
@@ -80,13 +79,12 @@
   <!-- Competitor Thumbnails -->
   <div class="card">
     <h2>📸 Competitor Thumbnails (Optional)</h2>
-    <p class="note" style="margin-bottom:12px;color:#8892b0;font-size:13px;">Competitor ke thumbnails upload karein — AI unka style dekh kar better thumbnail banayega</p>
+    <p style="font-size:13px;color:#8892b0;margin-bottom:12px;">Competitor ke thumbnails upload karein — style reference ke liye</p>
     <div class="grid2">
       <div>
         <label>Thumbnail 1</label>
         <div class="upload-box" onclick="document.getElementById('img1').click()">
-          <div class="upload-icon">🖼️</div>
-          Click karke upload karein
+          <div class="upload-icon">🖼️</div>Click karke upload karein
           <input type="file" id="img1" accept="image/*" style="display:none" onchange="previewImg(this,'p1','lbl1')">
         </div>
         <img id="p1" class="preview-img" alt="Competitor 1">
@@ -95,8 +93,7 @@
       <div>
         <label>Thumbnail 2</label>
         <div class="upload-box" onclick="document.getElementById('img2').click()">
-          <div class="upload-icon">🖼️</div>
-          Click karke upload karein
+          <div class="upload-icon">🖼️</div>Click karke upload karein
           <input type="file" id="img2" accept="image/*" style="display:none" onchange="previewImg(this,'p2','lbl2')">
         </div>
         <img id="p2" class="preview-img" alt="Competitor 2">
@@ -105,8 +102,7 @@
       <div>
         <label>Thumbnail 3</label>
         <div class="upload-box" onclick="document.getElementById('img3').click()">
-          <div class="upload-icon">🖼️</div>
-          Click karke upload karein
+          <div class="upload-icon">🖼️</div>Click karke upload karein
           <input type="file" id="img3" accept="image/*" style="display:none" onchange="previewImg(this,'p3','lbl3')">
         </div>
         <img id="p3" class="preview-img" alt="Competitor 3">
@@ -115,8 +111,7 @@
       <div>
         <label>Thumbnail 4</label>
         <div class="upload-box" onclick="document.getElementById('img4').click()">
-          <div class="upload-icon">🖼️</div>
-          Click karke upload karein
+          <div class="upload-icon">🖼️</div>Click karke upload karein
           <input type="file" id="img4" accept="image/*" style="display:none" onchange="previewImg(this,'p4','lbl4')">
         </div>
         <img id="p4" class="preview-img" alt="Competitor 4">
@@ -153,7 +148,7 @@
         </select>
       </div>
     </div>
-    <label>Style tags (optional — multiple select kar sakte hain)</label>
+    <label>Style tags (optional)</label>
     <div class="tags">
       <span class="tag" onclick="toggleTag(this)">Bold text</span>
       <span class="tag" onclick="toggleTag(this)">Fire effect</span>
@@ -166,31 +161,24 @@
     </div>
   </div>
 
-  <!-- Generate Button -->
   <button class="btn-generate" id="genbtn" onclick="generate()">🎨 Thumbnail Generate Karo</button>
 
-  <!-- Loading -->
   <div class="loading-box" id="loading">
     <span class="spinner"></span> AI thumbnail bana raha hai — 20-40 seconds lagenge...
   </div>
 
   <!-- Result -->
   <div class="result-card" id="result-card">
-    <h2>🖼️ Aapka Thumbnail Taiyaar Hai!</h2>
-    <img id="generated-img" alt="Generated Thumbnail">
-    <button class="btn-open" id="open-btn" onclick="openImage()">🔗 Thumbnail Nayi Tab Mein Kholo</button>
-    <div class="step-list">
-      📥 <strong>Download karne ka tarika:</strong><br>
-      1. Upar green button dabao — nayi tab mein image khulegi<br>
-      2. Image par <strong>right-click</strong> karo<br>
-      3. <strong>"Save image as"</strong> select karo ✅<br>
-      <span style="color:#4a5568">Ya seedha thumbnail par right-click karke bhi save kar sakte hain</span>
-    </div>
+    <h2 id="result-title">🖼️ Aapka Thumbnail Taiyaar Hai!</h2>
+    <!-- Using iframe to bypass CORS -->
+    <iframe id="thumb-iframe" scrolling="no" title="Generated Thumbnail"></iframe>
+    <button class="btn-download" id="dl-btn" onclick="downloadThumb()">⬇️ Download Thumbnail</button>
+    <p class="note">Download nahi ho raha? Thumbnail par <strong>right-click → Save image as</strong> karo</p>
   </div>
 
 </div>
 
-<footer>Sports Thumbnail Generator &copy; 2025 — Powered by Pollinations.ai | Free AI Image Generation</footer>
+<footer>Sports Thumbnail Generator &copy; 2025 — Powered by Pollinations.ai</footer>
 
 <script>
   function previewImg(input, previewId, labelId) {
@@ -203,9 +191,7 @@
     lbl.style.display = 'block';
   }
 
-  function toggleTag(el) {
-    el.classList.toggle('on');
-  }
+  function toggleTag(el) { el.classList.toggle('on'); }
 
   function getSelectedTags() {
     const tags = Array.from(document.querySelectorAll('.tag.on')).map(t => t.textContent.trim());
@@ -214,14 +200,19 @@
 
   let currentImageUrl = '';
 
-  function openImage() {
-    if (currentImageUrl) window.open(currentImageUrl, '_blank');
+  function downloadThumb() {
+    const a = document.createElement('a');
+    a.href = currentImageUrl;
+    a.target = '_blank';
+    a.download = 'sports-thumbnail.jpg';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
   function generate() {
     const titleInput = document.getElementById('mytitle');
     const title = titleInput.value.trim();
-
     if (!title) {
       titleInput.focus();
       titleInput.style.borderColor = '#e63946';
@@ -249,46 +240,47 @@
     ].join(', ');
 
     const seed = Math.floor(Math.random() * 1000000);
-    const url  = 'https://image.pollinations.ai/prompt/'
-               + encodeURIComponent(prompt)
-               + '?width=1280&height=720&seed=' + seed
-               + '&nologo=true&model=flux';
-
-    currentImageUrl = url;
+    currentImageUrl = 'https://image.pollinations.ai/prompt/'
+      + encodeURIComponent(prompt)
+      + '?width=1280&height=720&seed=' + seed
+      + '&nologo=true&model=flux';
 
     const btn        = document.getElementById('genbtn');
     const loading    = document.getElementById('loading');
     const resultCard = document.getElementById('result-card');
-    const img        = document.getElementById('generated-img');
-    const openBtn    = document.getElementById('open-btn');
+    const iframe     = document.getElementById('thumb-iframe');
+    const dlBtn      = document.getElementById('dl-btn');
 
     btn.disabled             = true;
     loading.style.display    = 'block';
     resultCard.style.display = 'none';
-    img.style.display        = 'none';
-    openBtn.style.display    = 'none';
-    img.src                  = '';
+    iframe.style.display     = 'none';
+    dlBtn.style.display      = 'none';
 
-    img.onload = function () {
+    // Write image directly into iframe — no CORS block
+    iframe.onload = function() {
       loading.style.display    = 'none';
       btn.disabled             = false;
-      img.style.display        = 'block';
-      openBtn.style.display    = 'block';
+      iframe.style.display     = 'block';
+      dlBtn.style.display      = 'block';
       resultCard.style.display = 'block';
       resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     };
 
-    img.onerror = function () {
-      loading.style.display    = 'none';
-      btn.disabled             = false;
-      img.style.display        = 'none';
-      openBtn.style.display    = 'block';
-      resultCard.style.display = 'block';
-      resultCard.querySelector('h2').textContent = '✅ Thumbnail Taiyaar — Nayi Tab Mein Kholo!';
-      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
+    // Set iframe src to image URL directly
+    iframe.src = currentImageUrl;
 
-    img.src = url;
+    // Fallback timeout — if 60s pass show download button anyway
+    setTimeout(function() {
+      if (btn.disabled) {
+        loading.style.display    = 'none';
+        btn.disabled             = false;
+        dlBtn.style.display      = 'block';
+        resultCard.style.display = 'block';
+        document.getElementById('result-title').textContent = '✅ Thumbnail Taiyaar! Download karo:';
+        resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60000);
   }
 </script>
 </body>
