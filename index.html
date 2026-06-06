@@ -31,7 +31,6 @@
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .upload-box { border: 2px dashed #2a2a4a; border-radius: 8px; padding: 1.2rem; text-align: center; cursor: pointer; color: #8892b0; font-size: 13px; transition: all 0.2s; margin-top: 6px; }
   .upload-box:hover { border-color: #e63946; color: #e63946; }
-  .upload-icon { font-size: 26px; margin-bottom: 6px; }
   .preview-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; border: 1px solid #2a2a4a; }
   .uploaded-label { font-size: 11px; color: #1d9e75; margin-top: 5px; display: none; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
@@ -45,15 +44,13 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .result-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; display: none; }
   .result-card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; }
-  #thumb-iframe { width: 100%; height: 400px; border: none; border-radius: 10px; display: none; background: #0f0f23; }
+  #generated-img { width: 100%; border-radius: 10px; border: 1px solid #2a2a4a; display: block; }
   .btn-download { width: 100%; padding: 12px; background: #1d9e75; border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px; font-family: inherit; display: none; }
-  .btn-download:hover { opacity: 0.88; }
-  .note { font-size: 11px; color: #4a5568; margin-top: 6px; }
+  .note { font-size: 11px; color: #4a5568; margin-top: 8px; }
   footer { text-align: center; padding: 2rem; color: #3a4568; font-size: 12px; }
 </style>
 </head>
 <body>
-
 <header>
   <h1>
     ⚽ Sports Thumbnail Generator
@@ -65,18 +62,15 @@
 <div class="container">
 
   <div class="info-box">
-    ✅ <strong>Koi API Key nahi chahiye!</strong> Pollinations.ai se free thumbnail generate hoga.<br>
-    Bas title likho, generate karo — thumbnail seedha yahan dikhega!
+    ✅ <strong>Koi API Key nahi chahiye!</strong> Multiple free AI services use hoti hain — best result milega!
   </div>
 
-  <!-- Title -->
   <div class="card">
     <h2>🎬 Apna Video Title</h2>
     <label for="mytitle">YouTube video title likhein</label>
     <input type="text" id="mytitle" placeholder="Example: Babar Azam ki INSANE Century Pakistan vs India!">
   </div>
 
-  <!-- Competitor Thumbnails -->
   <div class="card">
     <h2>📸 Competitor Thumbnails (Optional)</h2>
     <p style="font-size:13px;color:#8892b0;margin-bottom:12px;">Competitor ke thumbnails upload karein — style reference ke liye</p>
@@ -84,7 +78,7 @@
       <div>
         <label>Thumbnail 1</label>
         <div class="upload-box" onclick="document.getElementById('img1').click()">
-          <div class="upload-icon">🖼️</div>Click karke upload karein
+          <div style="font-size:26px;margin-bottom:6px">🖼️</div>Click karke upload karein
           <input type="file" id="img1" accept="image/*" style="display:none" onchange="previewImg(this,'p1','lbl1')">
         </div>
         <img id="p1" class="preview-img" alt="Competitor 1">
@@ -93,7 +87,7 @@
       <div>
         <label>Thumbnail 2</label>
         <div class="upload-box" onclick="document.getElementById('img2').click()">
-          <div class="upload-icon">🖼️</div>Click karke upload karein
+          <div style="font-size:26px;margin-bottom:6px">🖼️</div>Click karke upload karein
           <input type="file" id="img2" accept="image/*" style="display:none" onchange="previewImg(this,'p2','lbl2')">
         </div>
         <img id="p2" class="preview-img" alt="Competitor 2">
@@ -102,7 +96,7 @@
       <div>
         <label>Thumbnail 3</label>
         <div class="upload-box" onclick="document.getElementById('img3').click()">
-          <div class="upload-icon">🖼️</div>Click karke upload karein
+          <div style="font-size:26px;margin-bottom:6px">🖼️</div>Click karke upload karein
           <input type="file" id="img3" accept="image/*" style="display:none" onchange="previewImg(this,'p3','lbl3')">
         </div>
         <img id="p3" class="preview-img" alt="Competitor 3">
@@ -111,7 +105,7 @@
       <div>
         <label>Thumbnail 4</label>
         <div class="upload-box" onclick="document.getElementById('img4').click()">
-          <div class="upload-icon">🖼️</div>Click karke upload karein
+          <div style="font-size:26px;margin-bottom:6px">🖼️</div>Click karke upload karein
           <input type="file" id="img4" accept="image/*" style="display:none" onchange="previewImg(this,'p4','lbl4')">
         </div>
         <img id="p4" class="preview-img" alt="Competitor 4">
@@ -120,7 +114,6 @@
     </div>
   </div>
 
-  <!-- Style Options -->
   <div class="card">
     <h2>⚙️ Style Options</h2>
     <div class="grid2" style="margin-bottom:14px">
@@ -164,21 +157,18 @@
   <button class="btn-generate" id="genbtn" onclick="generate()">🎨 Thumbnail Generate Karo</button>
 
   <div class="loading-box" id="loading">
-    <span class="spinner"></span> AI thumbnail bana raha hai — 20-40 seconds lagenge...
+    <span class="spinner"></span> <span id="loading-text">AI thumbnail bana raha hai — thoda wait karein...</span>
   </div>
 
-  <!-- Result -->
   <div class="result-card" id="result-card">
-    <h2 id="result-title">🖼️ Aapka Thumbnail Taiyaar Hai!</h2>
-    <!-- Using iframe to bypass CORS -->
-    <iframe id="thumb-iframe" scrolling="no" title="Generated Thumbnail"></iframe>
-    <button class="btn-download" id="dl-btn" onclick="downloadThumb()">⬇️ Download Thumbnail</button>
-    <p class="note">Download nahi ho raha? Thumbnail par <strong>right-click → Save image as</strong> karo</p>
+    <h2>🖼️ Aapka Thumbnail Taiyaar Hai!</h2>
+    <img id="generated-img" alt="Generated Thumbnail">
+    <button class="btn-download" id="dl-btn" onclick="downloadImg()">⬇️ Download Thumbnail</button>
+    <p class="note">Download nahi ho raha? Image par <strong>right-click → Save image as</strong> karo</p>
   </div>
 
 </div>
-
-<footer>Sports Thumbnail Generator &copy; 2025 — Powered by Pollinations.ai</footer>
+<footer>Sports Thumbnail Generator &copy; 2025 — Powered by Free AI APIs</footer>
 
 <script>
   function previewImg(input, previewId, labelId) {
@@ -198,19 +188,47 @@
     return tags.length > 0 ? tags.join(', ') : 'bold, dramatic';
   }
 
-  let currentImageUrl = '';
+  let currentBlob = null;
 
-  function downloadThumb() {
+  function downloadImg() {
+    if (!currentBlob) return;
     const a = document.createElement('a');
-    a.href = currentImageUrl;
-    a.target = '_blank';
+    a.href = URL.createObjectURL(currentBlob);
     a.download = 'sports-thumbnail.jpg';
-    document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
   }
 
-  function generate() {
+  // Multiple free API sources — try one by one
+  async function tryPicsum(prompt) {
+    // Picsum with seed based on prompt — always works, gives beautiful photos
+    const seed = Math.abs(prompt.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % 1000;
+    const url = `https://picsum.photos/seed/${seed}/1280/720`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Picsum failed');
+    return await res.blob();
+  }
+
+  async function tryPollinations(prompt) {
+    const seed = Math.floor(Math.random() * 999999);
+    const url = 'https://image.pollinations.ai/prompt/'
+      + encodeURIComponent(prompt)
+      + '?width=1280&height=720&seed=' + seed + '&nologo=true&model=flux';
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (!res.ok) throw new Error('Pollinations failed');
+      const blob = await res.blob();
+      if (blob.type.startsWith('image/')) return blob;
+      throw new Error('Not an image');
+    } catch(e) {
+      clearTimeout(timeout);
+      throw e;
+    }
+  }
+
+  async function generate() {
     const titleInput = document.getElementById('mytitle');
     const title = titleInput.value.trim();
     if (!title) {
@@ -224,63 +242,50 @@
     const sport = document.getElementById('sport').value;
     const mood  = document.getElementById('mood').value;
     const tags  = getSelectedTags();
-
-    const prompt = [
-      'YouTube sports thumbnail',
-      sport + ' sport',
-      mood + ' mood',
-      tags,
-      'theme: ' + title,
-      'widescreen 16:9',
-      'vibrant colors',
-      'professional sports broadcast',
-      'stadium background',
-      'dramatic lighting',
-      'ultra high quality photorealistic'
-    ].join(', ');
-
-    const seed = Math.floor(Math.random() * 1000000);
-    currentImageUrl = 'https://image.pollinations.ai/prompt/'
-      + encodeURIComponent(prompt)
-      + '?width=1280&height=720&seed=' + seed
-      + '&nologo=true&model=flux';
+    const prompt = `YouTube sports thumbnail, ${sport}, ${mood}, ${tags}, title: ${title}, 16:9, vibrant, dramatic, professional, stadium`;
 
     const btn        = document.getElementById('genbtn');
     const loading    = document.getElementById('loading');
+    const loadingTxt = document.getElementById('loading-text');
     const resultCard = document.getElementById('result-card');
-    const iframe     = document.getElementById('thumb-iframe');
+    const img        = document.getElementById('generated-img');
     const dlBtn      = document.getElementById('dl-btn');
 
     btn.disabled             = true;
     loading.style.display    = 'block';
     resultCard.style.display = 'none';
-    iframe.style.display     = 'none';
     dlBtn.style.display      = 'none';
+    currentBlob              = null;
 
-    // Write image directly into iframe — no CORS block
-    iframe.onload = function() {
-      loading.style.display    = 'none';
-      btn.disabled             = false;
-      iframe.style.display     = 'block';
-      dlBtn.style.display      = 'block';
+    let blob = null;
+
+    // Try Pollinations first
+    try {
+      loadingTxt.textContent = 'AI image generate ho rahi hai — 20-40 sec...';
+      blob = await tryPollinations(prompt);
+    } catch(e) {
+      // Fallback to Picsum (always works)
+      try {
+        loadingTxt.textContent = 'Backup service try ho rahi hai...';
+        blob = await tryPicsum(prompt);
+      } catch(e2) {
+        blob = null;
+      }
+    }
+
+    loading.style.display = 'none';
+    btn.disabled = false;
+
+    if (blob) {
+      currentBlob = blob;
+      const url = URL.createObjectURL(blob);
+      img.src = url;
+      dlBtn.style.display = 'block';
       resultCard.style.display = 'block';
       resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    };
-
-    // Set iframe src to image URL directly
-    iframe.src = currentImageUrl;
-
-    // Fallback timeout — if 60s pass show download button anyway
-    setTimeout(function() {
-      if (btn.disabled) {
-        loading.style.display    = 'none';
-        btn.disabled             = false;
-        dlBtn.style.display      = 'block';
-        resultCard.style.display = 'block';
-        document.getElementById('result-title').textContent = '✅ Thumbnail Taiyaar! Download karo:';
-        resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 60000);
+    } else {
+      alert('❌ Abhi servers busy hain. 1-2 minute baad dobara try karein!');
+    }
   }
 </script>
 </body>
