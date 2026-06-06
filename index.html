@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sports Thumbnail Generator | AI Powered Tool</title>
-<meta name="description" content="Free AI powered sports thumbnail generator for YouTube. Get title ideas, design suggestions and catchy hooks for cricket, football, PSL and more.">
+<meta name="description" content="Free AI powered sports thumbnail generator for YouTube. Cricket, Football, PSL and more.">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WPS3JWMMQY"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -15,85 +15,122 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
-  header { background: #1a1a2e; padding: 1.5rem 2rem; border-bottom: 2px solid #e63946; display: flex; align-items: center; gap: 12px; }
-  header h1 { font-size: 22px; font-weight: 700; }
-  header span { background: #e63946; font-size: 11px; padding: 3px 10px; border-radius: 20px; margin-left: 8px; }
-  .free-badge { background: #1d9e75; font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+  header { background: #1a1a2e; padding: 1.5rem 2rem; border-bottom: 2px solid #e63946; }
+  header h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+  .badge-red { background: #e63946; }
+  .badge-green { background: #1d9e75; }
   .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+  .info-box { background: #0a1f0a; border: 1px solid #1d9e75; border-radius: 10px; padding: 14px 16px; margin-bottom: 1.2rem; font-size: 13px; color: #2dce89; line-height: 1.6; }
   .card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; }
   .card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; }
   label { font-size: 12px; color: #8892b0; display: block; margin-bottom: 5px; }
-  input, textarea, select { width: 100%; padding: 10px 12px; background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 8px; color: #fff; font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s; }
-  input:focus, textarea:focus, select:focus { border-color: #e63946; }
-  textarea { min-height: 80px; resize: vertical; }
+  input, select { width: 100%; padding: 10px 12px; background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 8px; color: #fff; font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s; }
+  input:focus, select:focus { border-color: #e63946; }
   select option { background: #0f0f23; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .upload-box { border: 2px dashed #2a2a4a; border-radius: 8px; padding: 1.2rem; text-align: center; cursor: pointer; color: #8892b0; font-size: 13px; transition: all 0.2s; }
+  .upload-box { border: 2px dashed #2a2a4a; border-radius: 8px; padding: 1.2rem; text-align: center; cursor: pointer; color: #8892b0; font-size: 13px; transition: all 0.2s; margin-top: 6px; }
   .upload-box:hover { border-color: #e63946; color: #e63946; }
-  .preview { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; }
+  .upload-icon { font-size: 26px; margin-bottom: 6px; }
+  .preview-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; border: 1px solid #2a2a4a; }
+  .uploaded-label { font-size: 11px; color: #1d9e75; margin-top: 5px; display: none; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .tag { background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 20px; padding: 5px 14px; font-size: 12px; cursor: pointer; color: #8892b0; transition: all 0.15s; }
+  .tag { background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 20px; padding: 5px 14px; font-size: 12px; cursor: pointer; color: #8892b0; transition: all 0.15s; user-select: none; }
   .tag.on { background: #e6394622; border-color: #e63946; color: #e63946; }
-  .btn { width: 100%; padding: 14px; background: #e63946; border: none; border-radius: 10px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-bottom: 1rem; font-family: inherit; }
-  .btn:hover { opacity: 0.85; }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .loading { text-align: center; color: #8892b0; font-size: 14px; padding: 1rem; display: none; }
-  .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid #2a2a4a; border-top-color: #e63946; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+  .btn-generate { width: 100%; padding: 14px; background: #e63946; border: none; border-radius: 10px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-bottom: 1rem; font-family: inherit; letter-spacing: 0.5px; }
+  .btn-generate:hover { opacity: 0.88; }
+  .btn-generate:disabled { opacity: 0.45; cursor: not-allowed; }
+  .loading-box { text-align: center; color: #8892b0; font-size: 14px; padding: 1.2rem; display: none; background: #1a1a2e; border-radius: 10px; margin-bottom: 1rem; }
+  .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #2a2a4a; border-top-color: #e63946; border-radius: 50%; animation: spin 0.75s linear infinite; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .generated-img { width: 100%; border-radius: 10px; margin-top: 1rem; display: none; }
+  .result-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; display: none; }
+  .result-card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; }
+  #generated-img { width: 100%; border-radius: 10px; display: none; border: 1px solid #2a2a4a; }
+  .btn-open { width: 100%; padding: 11px; background: #1d9e75; border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px; font-family: inherit; display: none; }
+  .btn-open:hover { opacity: 0.88; }
+  .step-list { font-size: 12px; color: #8892b0; line-height: 2; margin-top: 10px; background: #0f0f23; border-radius: 8px; padding: 10px 14px; }
   .note { font-size: 11px; color: #4a5568; margin-top: 6px; }
-  .success-note { font-size: 12px; color: #1d9e75; margin-top: 6px; }
-  footer { text-align: center; padding: 2rem; color: #4a5568; font-size: 13px; }
-  .download-btn { width: 100%; padding: 10px; background: #1d9e75; border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; display: none; font-family: inherit; }
-  .info-box { background: #0f230f; border: 1px solid #1d9e75; border-radius: 10px; padding: 14px; margin-bottom: 1.2rem; font-size: 13px; color: #1d9e75; }
+  footer { text-align: center; padding: 2rem; color: #3a4568; font-size: 12px; }
 </style>
 </head>
 <body>
+
 <header>
-  <h1>⚽ Sports Thumbnail Generator <span>AI Powered</span> <span class="free-badge">✅ FREE</span></h1>
+  <h1>
+    ⚽ Sports Thumbnail Generator
+    <span class="badge badge-red">AI Powered</span>
+    <span class="badge badge-green">✅ 100% Free</span>
+  </h1>
 </header>
+
 <div class="container">
 
   <div class="info-box">
-    ✅ <strong>Koi API Key nahi chahiye!</strong> Yeh tool bilkul free hai — Pollinations.ai use karta hai. Bas title likho aur generate karo!
+    ✅ <strong>Koi API Key nahi chahiye!</strong> Yeh tool Pollinations.ai use karta hai — bilkul free aur unlimited.<br>
+    Bas apna title likho, style choose karo aur generate karo!
   </div>
 
+  <!-- Title -->
   <div class="card">
     <h2>🎬 Apna Video Title</h2>
-    <label>Apna YouTube video title likhein</label>
+    <label for="mytitle">YouTube video title likhein</label>
     <input type="text" id="mytitle" placeholder="Example: Babar Azam ki INSANE Century Pakistan vs India!">
   </div>
 
+  <!-- Competitor Thumbnails -->
   <div class="card">
-    <h2>📸 Competitor Thumbnails (Sample)</h2>
-    <p class="note" style="margin-bottom:10px">Competitor ke thumbnails upload karein — style reference ke liye</p>
+    <h2>📸 Competitor Thumbnails (Optional)</h2>
+    <p class="note" style="margin-bottom:12px;color:#8892b0;font-size:13px;">Competitor ke thumbnails upload karein — AI unka style dekh kar better thumbnail banayega</p>
     <div class="grid2">
       <div>
         <label>Thumbnail 1</label>
         <div class="upload-box" onclick="document.getElementById('img1').click()">
-          <div style="font-size:28px;margin-bottom:6px">🖼️</div>
-          Upload karein
-          <input type="file" id="img1" accept="image/*" style="display:none" onchange="previewImg(this,'p1')">
+          <div class="upload-icon">🖼️</div>
+          Click karke upload karein
+          <input type="file" id="img1" accept="image/*" style="display:none" onchange="previewImg(this,'p1','lbl1')">
         </div>
-        <img id="p1" class="preview" alt="preview 1">
+        <img id="p1" class="preview-img" alt="Competitor 1">
+        <div id="lbl1" class="uploaded-label">✅ Upload ho gaya!</div>
       </div>
       <div>
         <label>Thumbnail 2</label>
         <div class="upload-box" onclick="document.getElementById('img2').click()">
-          <div style="font-size:28px;margin-bottom:6px">🖼️</div>
-          Upload karein
-          <input type="file" id="img2" accept="image/*" style="display:none" onchange="previewImg(this,'p2')">
+          <div class="upload-icon">🖼️</div>
+          Click karke upload karein
+          <input type="file" id="img2" accept="image/*" style="display:none" onchange="previewImg(this,'p2','lbl2')">
         </div>
-        <img id="p2" class="preview" alt="preview 2">
+        <img id="p2" class="preview-img" alt="Competitor 2">
+        <div id="lbl2" class="uploaded-label">✅ Upload ho gaya!</div>
+      </div>
+      <div>
+        <label>Thumbnail 3</label>
+        <div class="upload-box" onclick="document.getElementById('img3').click()">
+          <div class="upload-icon">🖼️</div>
+          Click karke upload karein
+          <input type="file" id="img3" accept="image/*" style="display:none" onchange="previewImg(this,'p3','lbl3')">
+        </div>
+        <img id="p3" class="preview-img" alt="Competitor 3">
+        <div id="lbl3" class="uploaded-label">✅ Upload ho gaya!</div>
+      </div>
+      <div>
+        <label>Thumbnail 4</label>
+        <div class="upload-box" onclick="document.getElementById('img4').click()">
+          <div class="upload-icon">🖼️</div>
+          Click karke upload karein
+          <input type="file" id="img4" accept="image/*" style="display:none" onchange="previewImg(this,'p4','lbl4')">
+        </div>
+        <img id="p4" class="preview-img" alt="Competitor 4">
+        <div id="lbl4" class="uploaded-label">✅ Upload ho gaya!</div>
       </div>
     </div>
   </div>
 
+  <!-- Style Options -->
   <div class="card">
     <h2>⚙️ Style Options</h2>
-    <div class="grid2" style="margin-bottom:12px">
+    <div class="grid2" style="margin-bottom:14px">
       <div>
-        <label>Sport type</label>
+        <label for="sport">Sport type</label>
         <select id="sport">
           <option>Cricket</option>
           <option>Football</option>
@@ -105,7 +142,7 @@
         </select>
       </div>
       <div>
-        <label>Thumbnail mood</label>
+        <label for="mood">Thumbnail mood</label>
         <select id="mood">
           <option>Hype / Exciting</option>
           <option>Match Preview</option>
@@ -116,7 +153,7 @@
         </select>
       </div>
     </div>
-    <label>Style tags</label>
+    <label>Style tags (optional — multiple select kar sakte hain)</label>
     <div class="tags">
       <span class="tag" onclick="toggleTag(this)">Bold text</span>
       <span class="tag" onclick="toggleTag(this)">Fire effect</span>
@@ -129,83 +166,130 @@
     </div>
   </div>
 
-  <button class="btn" onclick="generate()" id="genbtn">🎨 Thumbnail Generate Karo</button>
-  <div class="loading" id="loading"><span class="spinner"></span> AI thumbnail bana raha hai — 15-30 seconds lagenge...</div>
+  <!-- Generate Button -->
+  <button class="btn-generate" id="genbtn" onclick="generate()">🎨 Thumbnail Generate Karo</button>
 
-  <div class="card" id="result-card" style="display:none">
-    <h2>🖼️ Generated Thumbnail</h2>
-    <img id="generated-img" class="generated-img" alt="Generated Thumbnail">
-    <button class="download-btn" id="dl-btn" onclick="downloadImg()">⬇️ Download Thumbnail</button>
+  <!-- Loading -->
+  <div class="loading-box" id="loading">
+    <span class="spinner"></span> AI thumbnail bana raha hai — 20-40 seconds lagenge...
+  </div>
+
+  <!-- Result -->
+  <div class="result-card" id="result-card">
+    <h2>🖼️ Aapka Thumbnail Taiyaar Hai!</h2>
+    <img id="generated-img" alt="Generated Thumbnail">
+    <button class="btn-open" id="open-btn" onclick="openImage()">🔗 Thumbnail Nayi Tab Mein Kholo</button>
+    <div class="step-list">
+      📥 <strong>Download karne ka tarika:</strong><br>
+      1. Upar green button dabao — nayi tab mein image khulegi<br>
+      2. Image par <strong>right-click</strong> karo<br>
+      3. <strong>"Save image as"</strong> select karo ✅<br>
+      <span style="color:#4a5568">Ya seedha thumbnail par right-click karke bhi save kar sakte hain</span>
+    </div>
   </div>
 
 </div>
-<footer>Sports Thumbnail Generator &copy; 2025 — Powered by Pollinations.ai</footer>
+
+<footer>Sports Thumbnail Generator &copy; 2025 — Powered by Pollinations.ai | Free AI Image Generation</footer>
+
 <script>
-function previewImg(input, id) {
-  const file = input.files[0];
-  if (!file) return;
-  const img = document.getElementById(id);
-  img.src = URL.createObjectURL(file);
-  img.style.display = 'block';
-}
-function toggleTag(el) { el.classList.toggle('on'); }
-function getSelectedTags() {
-  return Array.from(document.querySelectorAll('.tag.on')).map(t => t.textContent).join(', ');
-}
-function downloadImg() {
-  const img = document.getElementById('generated-img');
-  const a = document.createElement('a');
-  a.href = img.src;
-  a.download = 'sports-thumbnail.png';
-  a.click();
-}
-
-async function generate() {
-  const title = document.getElementById('mytitle').value.trim();
-  if (!title) { alert('Apna video title likho!'); return; }
-
-  const sport = document.getElementById('sport').value;
-  const mood = document.getElementById('mood').value;
-  const tags = getSelectedTags();
-
-  const prompt = `YouTube sports thumbnail, ${sport}, ${mood}, ${tags || 'bold dramatic'}, title: ${title}, 16:9, vibrant colors, professional, stadium, dramatic lighting, high quality, photorealistic`;
-
-  const btn = document.getElementById('genbtn');
-  const loading = document.getElementById('loading');
-  const resultCard = document.getElementById('result-card');
-  const genImg = document.getElementById('generated-img');
-  const dlBtn = document.getElementById('dl-btn');
-
-  btn.disabled = true;
-  loading.style.display = 'block';
-  resultCard.style.display = 'none';
-
-  try {
-    const encodedPrompt = encodeURIComponent(prompt);
-    const seed = Math.floor(Math.random() * 999999);
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=1280&height=720&seed=${seed}&nologo=true`;
-
-    // Load image
-    await new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = imageUrl;
-      genImg.src = imageUrl;
-    });
-
-    genImg.style.display = 'block';
-    dlBtn.style.display = 'block';
-    resultCard.style.display = 'block';
-
-  } catch(e) {
-    alert('Error aaya! Internet connection check karein aur dobara try karein.');
+  function previewImg(input, previewId, labelId) {
+    const file = input.files[0];
+    if (!file) return;
+    const img = document.getElementById(previewId);
+    const lbl = document.getElementById(labelId);
+    img.src = URL.createObjectURL(file);
+    img.style.display = 'block';
+    lbl.style.display = 'block';
   }
 
-  btn.disabled = false;
-  loading.style.display = 'none';
-}
+  function toggleTag(el) {
+    el.classList.toggle('on');
+  }
+
+  function getSelectedTags() {
+    const tags = Array.from(document.querySelectorAll('.tag.on')).map(t => t.textContent.trim());
+    return tags.length > 0 ? tags.join(', ') : 'bold, dramatic';
+  }
+
+  let currentImageUrl = '';
+
+  function openImage() {
+    if (currentImageUrl) window.open(currentImageUrl, '_blank');
+  }
+
+  function generate() {
+    const titleInput = document.getElementById('mytitle');
+    const title = titleInput.value.trim();
+
+    if (!title) {
+      titleInput.focus();
+      titleInput.style.borderColor = '#e63946';
+      setTimeout(() => titleInput.style.borderColor = '#2a2a4a', 2000);
+      alert('⚠️ Pehle apna video title likho!');
+      return;
+    }
+
+    const sport = document.getElementById('sport').value;
+    const mood  = document.getElementById('mood').value;
+    const tags  = getSelectedTags();
+
+    const prompt = [
+      'YouTube sports thumbnail',
+      sport + ' sport',
+      mood + ' mood',
+      tags,
+      'theme: ' + title,
+      'widescreen 16:9',
+      'vibrant colors',
+      'professional sports broadcast',
+      'stadium background',
+      'dramatic lighting',
+      'ultra high quality photorealistic'
+    ].join(', ');
+
+    const seed = Math.floor(Math.random() * 1000000);
+    const url  = 'https://image.pollinations.ai/prompt/'
+               + encodeURIComponent(prompt)
+               + '?width=1280&height=720&seed=' + seed
+               + '&nologo=true&model=flux';
+
+    currentImageUrl = url;
+
+    const btn        = document.getElementById('genbtn');
+    const loading    = document.getElementById('loading');
+    const resultCard = document.getElementById('result-card');
+    const img        = document.getElementById('generated-img');
+    const openBtn    = document.getElementById('open-btn');
+
+    btn.disabled             = true;
+    loading.style.display    = 'block';
+    resultCard.style.display = 'none';
+    img.style.display        = 'none';
+    openBtn.style.display    = 'none';
+    img.src                  = '';
+
+    img.onload = function () {
+      loading.style.display    = 'none';
+      btn.disabled             = false;
+      img.style.display        = 'block';
+      openBtn.style.display    = 'block';
+      resultCard.style.display = 'block';
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    img.onerror = function () {
+      loading.style.display    = 'none';
+      btn.disabled             = false;
+      img.style.display        = 'none';
+      openBtn.style.display    = 'block';
+      resultCard.style.display = 'block';
+      resultCard.querySelector('h2').textContent = '✅ Thumbnail Taiyaar — Nayi Tab Mein Kholo!';
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    img.src = url;
+  }
 </script>
 </body>
 </html>
