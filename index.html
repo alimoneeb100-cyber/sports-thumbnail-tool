@@ -22,6 +22,19 @@
   .badge-green { background: #1d9e75; }
   .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
   .info-box { background: #0a1f0a; border: 1px solid #1d9e75; border-radius: 10px; padding: 14px 16px; margin-bottom: 1.2rem; font-size: 13px; color: #2dce89; line-height: 1.6; }
+  /* Token Box */
+  .token-box { background: #1a1020; border: 1px solid #7c3aed; border-radius: 12px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+  .token-box .token-title { font-size: 14px; font-weight: 600; color: #a78bfa; margin-bottom: 8px; }
+  .token-row { display: flex; gap: 8px; }
+  .token-row input { flex: 1; padding: 10px 12px; background: #0f0f23; border: 1px solid #7c3aed; border-radius: 8px; color: #fff; font-size: 13px; font-family: monospace; outline: none; }
+  .token-row input:focus { border-color: #a78bfa; }
+  .btn-save { padding: 10px 18px; background: #7c3aed; border: none; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn-save:hover { background: #6d28d9; }
+  .token-status { font-size: 11px; margin-top: 6px; }
+  .token-status.ok { color: #1d9e75; }
+  .token-status.err { color: #e63946; }
+  .token-help { font-size: 11px; color: #6b5e8a; margin-top: 6px; line-height: 1.5; }
+  /* Cards */
   .card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; }
   .card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; }
   label { font-size: 12px; color: #8892b0; display: block; margin-bottom: 5px; }
@@ -42,9 +55,15 @@
   .loading-box { text-align: center; color: #8892b0; font-size: 14px; padding: 1.4rem; display: none; background: #1a1a2e; border-radius: 10px; margin-bottom: 1rem; border: 1px solid #2a2a4a; }
   .spinner { display: inline-block; width: 18px; height: 18px; border: 2px solid #2a2a4a; border-top-color: #e63946; border-radius: 50%; animation: spin 0.75s linear infinite; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .steps { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 10px; }
+  .step { font-size: 11px; padding: 4px 10px; border-radius: 20px; background: #0f0f23; border: 1px solid #2a2a4a; color: #4a5568; }
+  .step.active { border-color: #e63946; color: #e63946; }
+  .step.done { border-color: #1d9e75; color: #1d9e75; }
   .result-card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; display: none; }
   .result-card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; }
   #generated-img { width: 100%; border-radius: 10px; border: 1px solid #2a2a4a; display: block; }
+  .prompt-box { background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 8px; padding: 12px; margin-top: 10px; font-size: 12px; color: #8892b0; line-height: 1.6; display: none; }
+  .prompt-box strong { color: #a8b2d8; display: block; margin-bottom: 4px; }
   .btn-download { width: 100%; padding: 12px; background: #1d9e75; border: none; border-radius: 8px; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px; font-family: inherit; display: none; }
   .note { font-size: 11px; color: #4a5568; margin-top: 8px; }
   footer { text-align: center; padding: 2rem; color: #3a4568; font-size: 12px; }
@@ -62,7 +81,20 @@
 <div class="container">
 
   <div class="info-box">
-    ✅ <strong>Koi API Key nahi chahiye!</strong> Multiple free AI services use hoti hain — best result milega!
+    ✅ <strong>Smart AI System!</strong> HuggingFace AI pehle aapke title ko analyze karke ek detailed prompt banata hai — phir us se title-matched thumbnail generate hoti hai!
+  </div>
+
+  <!-- HuggingFace Token -->
+  <div class="token-box">
+    <div class="token-title">🔑 HuggingFace API Token (Smart AI ke liye)</div>
+    <div class="token-row">
+      <input type="password" id="hf-token" placeholder="hf_xxxxxxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+      <button class="btn-save" onclick="saveToken()">Save</button>
+    </div>
+    <div class="token-status" id="token-status"></div>
+    <div class="token-help">
+      Token banana: huggingface.co/settings/tokens → New token → Type: Read → Create → Copy karein yahan paste karein
+    </div>
   </div>
 
   <div class="card">
@@ -157,12 +189,22 @@
   <button class="btn-generate" id="genbtn" onclick="generate()">🎨 Thumbnail Generate Karo</button>
 
   <div class="loading-box" id="loading">
-    <span class="spinner"></span> <span id="loading-text">AI thumbnail bana raha hai — thoda wait karein...</span>
+    <div class="steps">
+      <span class="step" id="step1">Step 1: Title analyze</span>
+      <span class="step" id="step2">Step 2: Smart prompt</span>
+      <span class="step" id="step3">Step 3: Image generate</span>
+    </div>
+    <br>
+    <span class="spinner"></span> <span id="loading-text">Shuru ho raha hai...</span>
   </div>
 
   <div class="result-card" id="result-card">
     <h2>🖼️ Aapka Thumbnail Taiyaar Hai!</h2>
     <img id="generated-img" alt="Generated Thumbnail">
+    <div class="prompt-box" id="prompt-display">
+      <strong>🤖 AI Generated Prompt:</strong>
+      <span id="prompt-text"></span>
+    </div>
     <button class="btn-download" id="dl-btn" onclick="downloadImg()">⬇️ Download Thumbnail</button>
     <p class="note">Download nahi ho raha? Image par <strong>right-click → Save image as</strong> karo</p>
   </div>
@@ -171,6 +213,27 @@
 <footer>Sports Thumbnail Generator &copy; 2025 — Powered by Free AI APIs</footer>
 
 <script>
+  // Token load from localStorage
+  let hfToken = localStorage.getItem('hf_token') || '';
+  if (hfToken) {
+    document.getElementById('hf-token').value = hfToken;
+    document.getElementById('token-status').textContent = '✅ Token save hai — ready!';
+    document.getElementById('token-status').className = 'token-status ok';
+  }
+
+  function saveToken() {
+    const val = document.getElementById('hf-token').value.trim();
+    if (!val.startsWith('hf_')) {
+      document.getElementById('token-status').textContent = '❌ Token "hf_" se shuru hona chahiye';
+      document.getElementById('token-status').className = 'token-status err';
+      return;
+    }
+    hfToken = val;
+    localStorage.setItem('hf_token', val);
+    document.getElementById('token-status').textContent = '✅ Token save ho gaya — ready!';
+    document.getElementById('token-status').className = 'token-status ok';
+  }
+
   function previewImg(input, previewId, labelId) {
     const file = input.files[0];
     if (!file) return;
@@ -185,7 +248,16 @@
 
   function getSelectedTags() {
     const tags = Array.from(document.querySelectorAll('.tag.on')).map(t => t.textContent.trim());
-    return tags.length > 0 ? tags.join(', ') : 'bold, dramatic';
+    return tags.length > 0 ? tags.join(', ') : 'dramatic, bold';
+  }
+
+  function setStep(num) {
+    for (let i = 1; i <= 3; i++) {
+      const el = document.getElementById('step' + i);
+      if (i < num) el.className = 'step done';
+      else if (i === num) el.className = 'step active';
+      else el.className = 'step';
+    }
   }
 
   let currentBlob = null;
@@ -198,34 +270,60 @@
     a.click();
   }
 
-  // Multiple free API sources — try one by one
-  async function tryPicsum(prompt) {
-    // Picsum with seed based on prompt — always works, gives beautiful photos
-    const seed = Math.abs(prompt.split('').reduce((a,c) => a + c.charCodeAt(0), 0)) % 1000;
-    const url = `https://picsum.photos/seed/${seed}/1280/720`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Picsum failed');
-    return await res.blob();
+  // HuggingFace Mistral se smart prompt generate karo
+  async function generateSmartPrompt(title, sport, mood, tags) {
+    const msg = `You are a YouTube thumbnail art director. Convert this video title into a detailed image generation prompt.
+
+Title: "${title}"
+Sport: ${sport}
+Mood: ${mood}
+Style: ${tags}
+
+Rules:
+- Return ONLY the image prompt, nothing else, no explanation
+- No text overlays in the image description
+- Photorealistic, dramatic, professional sports photography
+- 16:9 YouTube thumbnail composition
+- Under 120 words`;
+
+    const res = await fetch(
+      "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.3",
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${hfToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          inputs: `<s>[INST] ${msg} [/INST]`,
+          parameters: { max_new_tokens: 180, temperature: 0.7, return_full_text: false }
+        })
+      }
+    );
+    if (!res.ok) throw new Error('HF failed');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const text = Array.isArray(data) ? data[0]?.generated_text : data.generated_text;
+    if (!text) throw new Error('Empty');
+    return text.trim();
   }
 
-  async function tryPollinations(prompt) {
+  // Pollinations se image generate karo
+  async function generateImage(prompt) {
     const seed = Math.floor(Math.random() * 999999);
     const url = 'https://image.pollinations.ai/prompt/'
       + encodeURIComponent(prompt)
-      + '?width=1280&height=720&seed=' + seed + '&nologo=true&model=flux';
+      + '?width=1280&height=720&seed=' + seed + '&nologo=true&model=flux&enhance=true';
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000);
+    const timeout = setTimeout(() => controller.abort(), 90000);
     try {
       const res = await fetch(url, { signal: controller.signal });
       clearTimeout(timeout);
       if (!res.ok) throw new Error('Pollinations failed');
       const blob = await res.blob();
       if (blob.type.startsWith('image/')) return blob;
-      throw new Error('Not an image');
-    } catch(e) {
-      clearTimeout(timeout);
-      throw e;
-    }
+      throw new Error('Not image');
+    } catch(e) { clearTimeout(timeout); throw e; }
   }
 
   async function generate() {
@@ -238,11 +336,15 @@
       alert('⚠️ Pehle apna video title likho!');
       return;
     }
+    if (!hfToken) {
+      alert('⚠️ Pehle HuggingFace token save karo upar wale box mein!');
+      document.getElementById('hf-token').focus();
+      return;
+    }
 
     const sport = document.getElementById('sport').value;
     const mood  = document.getElementById('mood').value;
     const tags  = getSelectedTags();
-    const prompt = `YouTube sports thumbnail, ${sport}, ${mood}, ${tags}, title: ${title}, 16:9, vibrant, dramatic, professional, stadium`;
 
     const btn        = document.getElementById('genbtn');
     const loading    = document.getElementById('loading');
@@ -250,6 +352,8 @@
     const resultCard = document.getElementById('result-card');
     const img        = document.getElementById('generated-img');
     const dlBtn      = document.getElementById('dl-btn');
+    const promptDisplay = document.getElementById('prompt-display');
+    const promptText    = document.getElementById('prompt-text');
 
     btn.disabled             = true;
     loading.style.display    = 'block';
@@ -257,20 +361,31 @@
     dlBtn.style.display      = 'none';
     currentBlob              = null;
 
+    let smartPrompt = '';
     let blob = null;
 
-    // Try Pollinations first
     try {
-      loadingTxt.textContent = 'AI image generate ho rahi hai — 20-40 sec...';
-      blob = await tryPollinations(prompt);
+      setStep(1);
+      loadingTxt.textContent = 'Title analyze ho raha hai...';
+      await new Promise(r => setTimeout(r, 400));
+
+      setStep(2);
+      loadingTxt.textContent = 'HuggingFace AI smart prompt bana raha hai...';
+      smartPrompt = await generateSmartPrompt(title, sport, mood, tags);
+
+      setStep(3);
+      loadingTxt.textContent = 'Image generate ho rahi hai — 20-40 sec...';
+      blob = await generateImage(smartPrompt);
+
     } catch(e) {
-      // Fallback to Picsum (always works)
+      // Fallback: manually built specific prompt
+      console.warn('HF failed, using fallback:', e.message);
       try {
-        loadingTxt.textContent = 'Backup service try ho rahi hai...';
-        blob = await tryPicsum(prompt);
-      } catch(e2) {
-        blob = null;
-      }
+        setStep(3);
+        loadingTxt.textContent = 'Backup mode — image generate ho rahi hai...';
+        smartPrompt = `Professional sports photography, ${sport}, ${mood} atmosphere, ${tags}, dramatic stadium lighting, intense action moment, vivid colors, cinematic wide shot, 16:9, photorealistic, no text overlay, scene inspired by: ${title}`;
+        blob = await generateImage(smartPrompt);
+      } catch(e2) { blob = null; }
     }
 
     loading.style.display = 'none';
@@ -278,13 +393,14 @@
 
     if (blob) {
       currentBlob = blob;
-      const url = URL.createObjectURL(blob);
-      img.src = url;
+      img.src = URL.createObjectURL(blob);
+      promptText.textContent = smartPrompt;
+      promptDisplay.style.display = 'block';
       dlBtn.style.display = 'block';
       resultCard.style.display = 'block';
       resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-      alert('❌ Abhi servers busy hain. 1-2 minute baad dobara try karein!');
+      alert('❌ Server busy hai. 1-2 minute baad dobara try karein!');
     }
   }
 </script>
