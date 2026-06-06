@@ -5,45 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sports Thumbnail Generator | AI Powered Tool</title>
 <meta name="description" content="Free AI powered sports thumbnail generator for YouTube. Get title ideas, design suggestions and catchy hooks for cricket, football, PSL and more.">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WPS3JWMMQY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WPS3JWMMQY');
+</script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Segoe UI', sans-serif; background: #0f0f0f; color: #fff; min-height: 100vh; }
-  header { background: linear-gradient(135deg, #1a1a2e, #16213e); padding: 1.5rem 2rem; border-bottom: 2px solid #e63946; display: flex; align-items: center; gap: 12px; }
+  header { background: #1a1a2e; padding: 1.5rem 2rem; border-bottom: 2px solid #e63946; display: flex; align-items: center; gap: 12px; }
   header h1 { font-size: 22px; font-weight: 700; color: #fff; }
   header span { background: #e63946; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
   .container { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
   .card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.2rem; }
   .card h2 { font-size: 15px; font-weight: 600; color: #a8b2d8; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
-  .card h2 .icon { font-size: 18px; }
   label { font-size: 12px; color: #8892b0; display: block; margin-bottom: 5px; }
-  input[type="text"], textarea, select {
-    width: 100%; padding: 10px 12px; background: #0f0f23; border: 1px solid #2a2a4a;
-    border-radius: 8px; color: #fff; font-size: 14px; font-family: inherit;
-    outline: none; transition: border 0.2s;
-  }
+  input[type="text"], textarea, select { width: 100%; padding: 10px 12px; background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 8px; color: #fff; font-size: 14px; font-family: inherit; outline: none; transition: border 0.2s; }
   input[type="text"]:focus, textarea:focus, select:focus { border-color: #e63946; }
   textarea { min-height: 80px; resize: vertical; }
   select option { background: #0f0f23; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .upload-box {
-    border: 2px dashed #2a2a4a; border-radius: 8px; padding: 1.2rem;
-    text-align: center; cursor: pointer; color: #8892b0; font-size: 13px;
-    transition: all 0.2s;
-  }
+  .upload-box { border: 2px dashed #2a2a4a; border-radius: 8px; padding: 1.2rem; text-align: center; cursor: pointer; color: #8892b0; font-size: 13px; transition: all 0.2s; }
   .upload-box:hover { border-color: #e63946; color: #e63946; }
   .upload-box .ico { font-size: 28px; display: block; margin-bottom: 6px; }
   .preview { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; margin-top: 8px; display: none; }
   .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .tag {
-    background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 20px;
-    padding: 5px 14px; font-size: 12px; cursor: pointer; color: #8892b0; transition: all 0.15s;
-  }
+  .tag { background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 20px; padding: 5px 14px; font-size: 12px; cursor: pointer; color: #8892b0; transition: all 0.15s; }
   .tag.on { background: #e6394622; border-color: #e63946; color: #e63946; }
-  .btn {
-    width: 100%; padding: 14px; background: #e63946; border: none; border-radius: 10px;
-    color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s;
-    margin-bottom: 1rem; font-family: inherit;
-  }
+  .btn { width: 100%; padding: 14px; background: #e63946; border: none; border-radius: 10px; color: #fff; font-size: 16px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-bottom: 1rem; font-family: inherit; }
   .btn:hover { opacity: 0.85; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .result { background: #0f0f23; border: 1px solid #2a2a4a; border-radius: 10px; padding: 1.2rem; font-size: 14px; line-height: 1.8; white-space: pre-wrap; display: none; color: #ccd6f6; }
@@ -54,17 +46,12 @@
 </style>
 </head>
 <body>
-
 <header>
-  <div>
-    <h1>⚽ Sports Thumbnail Generator <span>AI Powered</span></h1>
-  </div>
+  <h1>⚽ Sports Thumbnail Generator <span>AI Powered</span></h1>
 </header>
-
 <div class="container">
-
   <div class="card">
-    <h2><span class="icon">📸</span> Competitor Thumbnails (Sample)</h2>
+    <h2>📸 Competitor Thumbnails (Sample)</h2>
     <div class="grid2">
       <div>
         <label>Thumbnail 1</label>
@@ -84,9 +71,8 @@
       </div>
     </div>
   </div>
-
   <div class="card">
-    <h2><span class="icon">⚙️</span> Thumbnail Style</h2>
+    <h2>⚙️ Thumbnail Style</h2>
     <div class="grid2" style="margin-bottom:12px">
       <div>
         <label>Sport type</label>
@@ -124,25 +110,18 @@
       <span class="tag" onclick="toggleTag(this)">Flag / country</span>
     </div>
   </div>
-
   <div class="card">
-    <h2><span class="icon">✍️</span> Apna Prompt Likhein</h2>
+    <h2>✍️ Apna Prompt Likhein</h2>
     <textarea id="prompt" placeholder="Example: Pakistan vs India match highlight thumbnail, dramatic feel, Babar Azam face closeup, red and green colors..."></textarea>
   </div>
-
   <button class="btn" onclick="generate()" id="genbtn">✨ AI se Suggestions Lo</button>
-
   <div class="loading" id="loading"><span class="spinner"></span> AI soch raha hai...</div>
-
   <div class="card" id="result-card" style="display:none">
-    <h2><span class="icon">💡</span> AI Suggestions</h2>
+    <h2>💡 AI Suggestions</h2>
     <div class="result" id="result"></div>
   </div>
-
 </div>
-
 <footer>Sports Thumbnail Generator &copy; 2025 — Powered by AI</footer>
-
 <script>
 function previewImg(input, id) {
   const file = input.files[0];
@@ -151,43 +130,34 @@ function previewImg(input, id) {
   img.src = URL.createObjectURL(file);
   img.style.display = 'block';
 }
-
 function toggleTag(el) { el.classList.toggle('on'); }
-
 function getSelectedTags() {
   return Array.from(document.querySelectorAll('.tag.on')).map(t => t.textContent).join(', ');
 }
-
 async function generate() {
   const prompt = document.getElementById('prompt').value.trim();
   const sport = document.getElementById('sport').value;
   const mood = document.getElementById('mood').value;
   const tags = getSelectedTags();
   const hasImg = document.getElementById('img1').files.length > 0 || document.getElementById('img2').files.length > 0;
-
   const btn = document.getElementById('genbtn');
   const loading = document.getElementById('loading');
   const resultCard = document.getElementById('result-card');
   const resultBox = document.getElementById('result');
-
   btn.disabled = true;
   loading.style.display = 'block';
   resultCard.style.display = 'none';
-
   const fullPrompt = `Tu ek YouTube Sports Thumbnail Expert hai.
 Sport: ${sport}
 Mood: ${mood}
 Style tags: ${tags || 'none'}
 User prompt: ${prompt || 'general sports thumbnail'}
 ${hasImg ? 'User ne competitor thumbnails upload kiye hain — unse inspire hokar better suggest karo.' : ''}
-
 Yeh 3 cheezein do:
 1. TITLE IDEAS (3 catchy title options)
 2. DESIGN SUGGESTIONS (colors, layout, elements)
 3. CATCHY HOOKS (3 powerful one-liners)
-
 Roman Urdu ya English mein jawab do. Short aur actionable rakho.`;
-
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -208,7 +178,6 @@ Roman Urdu ya English mein jawab do. Short aur actionable rakho.`;
     resultBox.style.display = 'block';
     resultCard.style.display = 'block';
   }
-
   btn.disabled = false;
   loading.style.display = 'none';
 }
